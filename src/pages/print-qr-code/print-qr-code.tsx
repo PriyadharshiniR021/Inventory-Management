@@ -1,17 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 import {
   Search,
-  PlusCircle,
   RotateCw,
   ChevronUp,
   ChevronDown,
-  Maximize2,
-  Mail,
-  Bell,
-  Settings,
-  Store as StoreIcon,
-  CreditCard,
   Trash2,
   Eye,
   RotateCcw,
@@ -19,7 +12,8 @@ import {
   Minus,
   Plus,
   CheckCircle2,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 
 interface QrProductItem {
@@ -145,8 +139,6 @@ const QrCodePattern: React.FC<{ code: string; size?: number }> = ({ code, size =
 };
 
 export default function PrintQrCodePage() {
-  const navigate = useNavigate();
-
   // Header and Search States
   const [searchTerm, setSearchTerm] = useState('');
   const [tableSearch, setTableSearch] = useState('');
@@ -261,123 +253,8 @@ export default function PrintQrCodePage() {
         </div>
       )}
 
-      {/* TOP NAVBAR (Exact match across application) */}
-      <header className="h-16 bg-white border-b border-gray-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
-        {/* Left Search Bar */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-64 sm:w-80">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-12 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-all"
-            />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
-              ⌘ K
-            </span>
-          </div>
-        </div>
-
-        {/* Right Action Icons & User Controls */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Freshmart Branch Selector */}
-          <button
-            type="button"
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] rounded-md text-xs font-semibold hover:bg-emerald-100 transition-colors"
-          >
-            <StoreIcon className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Freshmart</span>
-            <ChevronDown className="w-3.5 h-3.5 ml-1 text-emerald-700" />
-          </button>
-
-          {/* + Add New Button (Orange) */}
-          <button
-            type="button"
-            onClick={() => navigate('/create-product')}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Add New</span>
-          </button>
-
-          {/* POS Button (Dark Navy) */}
-          <button
-            type="button"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1D273B] hover:bg-[#111827] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>POS</span>
-          </button>
-
-          {/* Language Flag */}
-          <button
-            type="button"
-            title="Language"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-sm"
-          >
-            🇺🇸
-          </button>
-
-          {/* Fullscreen Toggle */}
-          <button
-            type="button"
-            title="Toggle Fullscreen"
-            onClick={() => {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-              } else {
-                document.exitFullscreen().catch(() => {});
-              }
-            }}
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Maximize2 className="w-4 h-4" />
-          </button>
-
-          {/* Mail with Badge */}
-          <div className="relative">
-            <button
-              type="button"
-              title="Messages"
-              className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-            >
-              <Mail className="w-4 h-4" />
-            </button>
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-              1
-            </span>
-          </div>
-
-          {/* Notification Bell */}
-          <button
-            type="button"
-            title="Notifications"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-
-          {/* Settings Gear */}
-          <button
-            type="button"
-            title="Settings"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-
-          {/* User Profile Avatar */}
-          <div className="flex items-center gap-2 pl-1 border-l border-gray-200">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
-              alt="User profile"
-              className="w-8 h-8 rounded-full object-cover border border-gray-300"
-            />
-          </div>
-        </div>
-      </header>
+      {/* TOP NAVBAR */}
+      <Navbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       {/* PAGE BODY */}
       <div className="p-6 flex-1 space-y-4">
@@ -396,7 +273,7 @@ export default function PrintQrCodePage() {
               title="Refresh Data"
               className="w-9 h-9 rounded-md bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-50 shadow-2xs transition-colors"
             >
-              <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-orange-500' : ''}`} />
+              <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#315EFB]' : ''}`} />
             </button>
 
             <button
@@ -424,7 +301,7 @@ export default function PrintQrCodePage() {
                   <select
                     value={selectedWarehouse}
                     onChange={(e) => setSelectedWarehouse(e.target.value)}
-                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer"
+                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                   >
                     <option value="">Select</option>
                     <option value="Warehouse A (Main)">Warehouse A (Main)</option>
@@ -444,7 +321,7 @@ export default function PrintQrCodePage() {
                   <select
                     value={selectedStore}
                     onChange={(e) => setSelectedStore(e.target.value)}
-                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer"
+                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                   >
                     <option value="">Select</option>
                     <option value="Freshmart">Freshmart</option>
@@ -468,7 +345,7 @@ export default function PrintQrCodePage() {
                   placeholder="Search Product by Code"
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-md text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                  className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-md text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                 />
               </div>
 
@@ -479,7 +356,7 @@ export default function PrintQrCodePage() {
                     <div
                       key={prod.id}
                       onClick={() => handleAddProduct(prod)}
-                      className="p-2.5 flex items-center justify-between hover:bg-orange-50/60 cursor-pointer border-b border-gray-100 last:border-b-0 text-xs"
+                      className="p-2.5 flex items-center justify-between hover:bg-[#F5F7FF] cursor-pointer border-b border-gray-100 last:border-b-0 text-xs"
                     >
                       <div className="flex items-center gap-2.5">
                         <img
@@ -494,7 +371,7 @@ export default function PrintQrCodePage() {
                           </p>
                         </div>
                       </div>
-                      <span className="font-semibold text-orange-600 text-xs font-mono">{prod.code}</span>
+                      <span className="font-semibold text-[#315EFB] text-xs font-mono">{prod.code}</span>
                     </div>
                   ))}
                 </div>
@@ -512,7 +389,7 @@ export default function PrintQrCodePage() {
                     placeholder="Search"
                     value={tableSearch}
                     onChange={(e) => setTableSearch(e.target.value)}
-                    className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-md text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                    className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-md text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                   />
                 </div>
               </div>
@@ -572,7 +449,7 @@ export default function PrintQrCodePage() {
                               <button
                                 type="button"
                                 onClick={() => handleQtyChange(item.id, -1)}
-                                className="text-gray-500 hover:text-orange-600 transition-colors cursor-pointer"
+                                className="text-gray-500 hover:text-[#315EFB] transition-colors cursor-pointer"
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
@@ -582,7 +459,7 @@ export default function PrintQrCodePage() {
                               <button
                                 type="button"
                                 onClick={() => handleQtyChange(item.id, 1)}
-                                className="text-gray-500 hover:text-orange-600 transition-colors cursor-pointer"
+                                className="text-gray-500 hover:text-[#315EFB] transition-colors cursor-pointer"
                               >
                                 <Plus className="w-3.5 h-3.5" />
                               </button>
@@ -619,7 +496,7 @@ export default function PrintQrCodePage() {
                   <select
                     value={paperSize}
                     onChange={(e) => setPaperSize(e.target.value)}
-                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-orange-500 cursor-pointer"
+                    className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3.5 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                   >
                     <option value="">Select</option>
                     <option value="36mm (1.4 Inch)">36mm (1.4 Inch)</option>
@@ -655,7 +532,7 @@ export default function PrintQrCodePage() {
 
             {/* ACTION BUTTONS (Bottom Right matching Screenshot 1) */}
             <div className="flex items-center justify-end gap-3 flex-wrap pt-1">
-              {/* 1. Generate QR Code (Orange) */}
+              {/* 1. Generate QR Code (Cobalt) */}
               <button
                 type="button"
                 onClick={() => {
@@ -665,7 +542,7 @@ export default function PrintQrCodePage() {
                   }
                   setShowPreviewModal(true);
                 }}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
               >
                 <Eye className="w-4 h-4" />
                 <span>Generate QR Code</span>
@@ -707,7 +584,7 @@ export default function PrintQrCodePage() {
           type="button"
           title="Quick Settings"
           onClick={() => alert('Quick Settings Panel')}
-          className="w-9 h-9 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
+          className="w-9 h-9 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
         >
           <Settings className="w-4 h-4 animate-spin-slow" />
         </button>
@@ -742,7 +619,7 @@ export default function PrintQrCodePage() {
                   Array.from({ length: item.qty }).map((_, idx) => (
                     <div
                       key={`${item.id}-${idx}`}
-                      className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-3 flex flex-col items-center justify-between text-center shadow-2xs hover:border-orange-400 transition-colors"
+                      className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-3 flex flex-col items-center justify-between text-center shadow-2xs hover:border-[#315EFB] transition-colors"
                     >
                       {/* Product Name */}
                       <p className="text-xs font-semibold text-slate-800 line-clamp-1">

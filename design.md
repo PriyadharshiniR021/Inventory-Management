@@ -1,290 +1,573 @@
-# Auralis Style Guide
+# LancersLoom Management Software Design System & Migration Guide
 
-Style foundations only: color, type, spacing, shape, effects, motion, icons.
-
-**Look:** warm-neutral, light mode, editorial. Black and off-white UI, big tight bold headlines, hairline borders, pill buttons, soft blurred pastel glows as the only color.
-
----
-
-## 1. Color
-
-### Neutrals (UI)
-
-| Role | Hex | Use |
-|------|-----|-----|
-| Page background | `#F7F7F5` | Body, nav (80% opacity) |
-| Panel | `#F3F2EF` | Large panels, small cards |
-| Card | `#FCFCFB` | Feature cards |
-| Border | `#E7E7E4` | All 1px hairlines |
-| Text primary | `#111111` | Headings, body |
-| Text secondary | `#6B6B6B` | Paragraphs, captions, inactive items |
-| Primary (action) | `#000000` | Filled buttons |
-| On primary | `#FFFFFF` | Text on black |
-| Outline | `#747878` | Outlined button border |
-| Surface | `#FDF8F8` | Chips, tab active bg |
-| Surface variant | `#E5E2E1` | Tags, hover tint, chat bubbles |
-| Surface container low | `#F7F3F2` | Tab switcher bg, pills |
-| Dark surface | `#1C1B1B` | Dark avatar, dark elements |
-
-### Accents (decorative only, never for UI controls)
-
-| Name | Gradient / value | Use |
-|------|------------------|-----|
-| Rose to orange | `rose-400 → orange-300` | Hero orb |
-| Indigo to purple | `indigo-300 → purple-400` | Hero orb |
-| Emerald to teal | `emerald-300 → teal-200` | Hero orb |
-| Sky to blue | `sky-300 → blue-400` | Hero orb |
-| Card tint A | `indigo-500/10 → purple-500/20` | Card background glow |
-| Card tint B | `emerald-500/10 → teal-500/20` | Card background glow |
-| Soft orbs | `blue-200→cyan-100`, `purple-200→pink-100` | Showcase card glow |
-| Live / status | `emerald-500` dot, `emerald-700` text, `emerald-500/15` bg | Status badge |
-| Data bars | `blue-500`, peaks `purple-600` | Chart / spectrum |
-
-**Rule:** 95% of the interface is neutral. Color only appears as blurred glow shapes behind content.
+> **Single Source of Truth** for all LancersLoom Management Software applications (Inventory Management, Order Management, CRM, ERP, Warehouse Management, etc.).
+> 
+> **For Developers & Antigravity AI Agents**: This document specifies both the visual design tokens and the architectural blueprint. If a project has already been started with existing pages and components, follow the **[Antigravity AI Agent Migration Playbook](#antigravity-ai-agent-migration-playbook)** below to systematically refactor the application.
 
 ---
 
-## 2. Typography
+## Quick Summary of Core Principles
 
-**Font:** Geist (400, 500, 600, 700)
-**Icons:** Material Symbols Outlined
-
-### Scale
-
-| Style | Size | Line height | Letter spacing | Weight |
-|-------|------|-------------|----------------|--------|
-| H1 (hero) | 84px | 1.05 | -0.04em | 600 |
-| H2 (section) | 64px | 1.1 | -0.03em | 600 |
-| H2 (module) | 48px | 1.1 | -0.03em | 600 |
-| H3 | 32px | 1.2 | -0.02em | 600 |
-| Card title | 20px | 1.2 | -0.02em | 600 |
-| Body large (lead) | 18px | 1.6 | -0.01em | 400 |
-| Body | 16px | 1.5 | 0 | 400 |
-| UI text (nav, tabs, buttons) | 14px | 1.5 | -0.01em | 500 |
-| Label caps | 12px | 1 | +0.1em, uppercase | 600 |
-| Micro label | 10px | 1 | +0.1em, uppercase | 600 |
-| Mono (timecode) | 12px | 1 | 0 | 700 |
-| Wordmark | 20px | 1 | -0.05em | 700 |
-
-### Rules
-- Large headings: tight negative tracking, weight 600.
-- Tiny labels: wide positive tracking, uppercase.
-- UI controls: weight 500. Body: weight 400.
-- Paragraphs use secondary gray `#6B6B6B`; headings use `#111111`.
-- Headlines are sentence case.
+1. **Primary Accent**: Electric Cobalt Blue (`#315EFB`) is the **only** primary brand accent.
+2. **Absolute Color Rule**: **NO ORANGE** (`#FF7034`, `#E85B20`, `orange-500`, `orange-600`, `bg-orange-50`, etc.) anywhere in the codebase. All legacy orange elements must be converted to Cobalt Blue tokens.
+3. **Shell Layout & Sidebar Scroll**: The sidebar must **never scroll when the page scrolls**. The sidebar occupies `100vh` independently; if its menu items exceed screen height, the sidebar scrolls internally. The main content container scrolls independently.
+4. **Shared Reusable Navbar**: Every page must use the unified `<Navbar />` component (`src/components/navbar/navbar.tsx`) instead of duplicating header markup.
+5. **Clean Editorial Aesthetic**: Minimalist white/neutral canvas (`#FFFFFF` / `#F8F9FA`), subtle borders (`#E8EAF0`), crisp typography, and generous whitespace.
 
 ---
 
-## 3. Spacing and Layout
+## 1. Design Tokens & Color System
 
-| Token | Value |
-|-------|-------|
-| Base unit | 8px |
-| Content max width | 1280px |
-| Side padding | 32px |
-| Grid | 12 columns |
-| Gutter | 32px |
-| Nav height | 72px |
-| Top offset below nav | 140px |
-| Section gap | 140px to 180px |
-| Header to content | 48px to 64px |
-| Heading to paragraph | 24px |
+### 1.1 Core Design Tokens
 
-### Spacing scale in use
+| Token | Hex / Class | Role & Usage |
+|-------|-------------|--------------|
+| `--primary-accent` | `#315EFB` | Active nav items, primary buttons, focus rings, link hover, active pagination, icon highlights |
+| `--primary-accent-hover` | `#2448D8` | Hover state for primary buttons and interactive accents |
+| `--light-accent-bg` | `#F5F7FF` | Nav item hover, selected table rows, subtle pill tags, active dropdown options, dropzone hover |
+| `--primary-text` | `#000000` | Headings, primary labels, main text |
+| `--secondary-text` | `#526078` | Subtitles, muted labels, secondary icons, inactive nav items |
+| `--main-bg` | `#FFFFFF` | Cards, modals, sidebars, navbar, table rows |
+| `--canvas-bg` | `#F8F9FA` | Main page background behind cards |
+| `--subtle-border` | `#E8EAF0` | 1px hairline borders for cards, inputs, tables, dividers |
 
-| Size | Where |
-|------|-------|
-| 4px | Tab switcher inner padding |
-| 8px | Icon gaps, tight stacks |
-| 12px | Chip padding vertical, label gaps |
-| 16px | Button padding (small), card inner gaps, divider gaps |
-| 20px | Small card padding |
-| 24px | Large card padding, grid gap (cards), button padding (large horizontal) |
-| 32px | Panel padding, grid gutter, page side padding |
-| 48px | Header to content |
-| 64px | Large header to content |
-| 140px / 180px | Between sections |
+### 1.2 Preserved Functional Colors
 
-### Padding by component
+| Color | Hex / Class | Use |
+|-------|-------------|-----|
+| Success / Active Switch | `#10B981` (`emerald-500`) | Toggle switches (`role="switch"`), success badges, stock in status |
+| Danger / Delete | `#EF4444` (`red-500`) / `#DC2626` | Delete buttons, close icons, critical stock alerts, print action |
+| Secondary Dark Action | `#1D273B` / `#111827` | Secondary modal buttons (Cancel, Close, Reset) |
+| Excel Export | `#059669` (`emerald-600`) | CSV / Excel export button |
+| PDF Export | `#EF4444` (`red-500`) | PDF print / export button |
+| Pastel Badges | `#ECFDF5` (`text-emerald-700`) | Store badges (e.g. Freshmart, category tags) |
 
-| Component | Padding |
-|-----------|---------|
-| Button large | 12px 24px |
-| Button small / nav | 8px 16px |
-| Tab | 8px 16px |
-| Label pill | 4px 12px |
-| Small card | 20px |
-| Large card | 24px |
-| Panel / showcase card | 32px |
-| Glass widget | 32px |
+### 1.3 `src/index.css` Base Configuration
 
-### Breakpoints
-- Tablet: 768px (2 and 4 column grids, nav links appear)
-- Desktop: 1024px (12-column layouts)
-
----
-
-## 4. Shape (Border Radius)
-
-| Token | Value | Use |
-|-------|-------|-----|
-| sm | 4px | Small details |
-| md | 8px | Chips, inputs |
-| lg | 12px | Small cards |
-| xl | 24px | Large cards, inner bars |
-| 2xl | 28px | Hero panel, showcase cards |
-| glass | 32px | Floating glass widget |
-| full | 9999px | Buttons, tabs, pills, orbs, avatars |
-
----
-
-## 5. Borders and Elevation
-
-| Item | Value |
-|------|-------|
-| Default border | 1px solid `#E7E7E4` |
-| Outlined button | 1px solid `#747878` |
-| Nav bottom border | 1px, zinc-200 at 60% |
-| Glass border | 1px, white at 40% |
-| Divider line | 1px, `#E7E7E4`, 50% opacity |
-
-### Shadows (very light use)
-
-| Level | Value | Use |
-|-------|-------|-----|
-| None | none | Most cards and panels |
-| Small | `0 1px 2px rgba(0,0,0,0.05)` | Active tab, card hover |
-| Large | `0 10px 15px rgba(0,0,0,0.1)` | Circular play buttons |
-| Glass float | `0 48px 96px -24px rgba(0,0,0,0.25)` | Floating widget |
-
-Depth comes from tonal layering (page, then panel, then card) plus hairline borders, not shadows.
-
----
-
-## 6. Effects
-
-### Blur and glass
-
-| Effect | Value |
-|--------|-------|
-| Nav | bg `#F7F7F5` at 80%, backdrop blur 12px |
-| Frosted bar / overlay | bg surface at 80-90%, backdrop blur 12px |
-| Label chip on card | bg surface at 80%, backdrop blur 4px |
-| Glass widget | bg white at 25%, backdrop blur 64px, border white at 40% |
-
-### Decorative glow (orbs)
-- Shapes: circles 200px to 400px.
-- Fill: the accent gradients in section 1, diagonal (`to top right`).
-- Blur: 40px to 64px (`blur-3xl`); up to 80px for large soft glows.
-- Opacity: 40-60% in cards (rises on hover), 100% in hero panel.
-- Placement: behind content, overlapping each other, offset from center.
-
-### Opacity levels
-| Value | Use |
-|-------|-----|
-| 10-20% | Card tints |
-| 25% | Glass fill |
-| 40-50% | Resting glow layers |
-| 60-80% | Hovered glow layers |
-| 80-90% | Frosted bars |
-
----
-
-## 7. Motion
-
-| Interaction | Effect | Duration |
-|-------------|--------|----------|
-| Link hover | Color gray to near-black | 200ms |
-| Card hover | Tint fades in, tiny shadow | 150-300ms |
-| Glow layer hover | Opacity 40% to 60% | 500ms |
-| Image hover | Opacity 80% to 100% | 500ms |
-| Circular button hover | Scale 1.05 to 1.10 | 150ms |
-| Button press | Opacity 80% | instant |
-| Live status dot | Gentle pulse | loop |
-| Logo marquee | Continuous horizontal scroll, pauses on hover | 40s linear |
-
-**Feel:** soft and slow. Only opacity, color and small scale. No bouncing or sliding.
-
----
-
-## 8. Iconography
-
-| Property | Value |
-|----------|-------|
-| Set | Material Symbols Outlined |
-| Weight | 400 |
-| Default size | 24px |
-| Other sizes | 14px (avatars), 30px (logos), 36px (hero play) |
-| Style | Outline by default, filled only for the main play control |
-| Color | Secondary gray for decorative, primary for functional |
-
----
-
-## 9. Quick Reference
-
-```
-FONT        Geist 400 / 500 / 600 / 700
-BG          #F7F7F5      PANEL   #F3F2EF      CARD   #FCFCFB
-BORDER      #E7E7E4      TEXT    #111111      MUTED  #6B6B6B
-ACTION      #000000 with #FFFFFF text
-H1          84 / 1.05 / -0.04em / 600
-H2          64 (48 in modules) / 1.1 / -0.03em / 600
-CARD TITLE  20 / 600          BODY  16-18          UI  14 / 500
-LABEL       12 uppercase, +0.1em, 600
-WIDTH       1280 max, 32 side padding, 12 cols, 32 gutter
-SECTIONS    140-180 apart
-RADIUS      cards 24 / panels 28 / buttons, tabs, pills full
-SHADOW      almost none (hairline borders instead)
-GLASS       blur 12px (bars), 64px (widget), white 25-90%
-ACCENT      pastel blurred orbs only; green dot for "live"
-MOTION      opacity / color / scale 1.05; 40s marquee
-```
-
----
-
-## 10. Design Tokens (copy into any project)
+Every project must include these CSS variables and base rules:
 
 ```css
+@import "tailwindcss";
+
 :root {
-  /* Color */
-  --bg: #F7F7F5;
-  --panel: #F3F2EF;
-  --card: #FCFCFB;
-  --border: #E7E7E4;
-  --text: #111111;
-  --text-muted: #6B6B6B;
-  --primary: #000000;
-  --on-primary: #FFFFFF;
-  --outline: #747878;
-  --surface: #FDF8F8;
-  --surface-variant: #E5E2E1;
+  /* LancersLoom Strategic Accent Colour Tokens */
+  --primary-accent: #315EFB;
+  --primary-accent-hover: #2448D8;
+  --light-accent-bg: #F5F7FF;
+  --primary-text: #000000;
+  --secondary-text: #526078;
+  --main-bg: #FFFFFF;
+  --canvas-bg: #F8F9FA;
+  --subtle-border: #E8EAF0;
 
-  /* Type */
-  --font: "Geist", sans-serif;
-  --fs-h1: 84px;  --fs-h2: 64px;  --fs-h2-module: 48px;
-  --fs-h3: 32px;  --fs-card: 20px;
-  --fs-lead: 18px; --fs-body: 16px; --fs-ui: 14px; --fs-label: 12px;
-
-  /* Spacing */
-  --space-1: 4px;  --space-2: 8px;   --space-3: 12px; --space-4: 16px;
-  --space-5: 20px; --space-6: 24px;  --space-8: 32px; --space-12: 48px;
-  --space-16: 64px; --section-min: 140px; --section-max: 180px;
-  --container: 1280px; --gutter: 32px; --nav-h: 72px;
+  /* Typography */
+  --font: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", monospace;
 
   /* Radius */
-  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
-  --r-xl: 24px; --r-2xl: 28px; --r-glass: 32px; --r-full: 9999px;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 9999px;
+}
 
-  /* Shadow */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,.1);
-  --shadow-glass: 0 48px 96px -24px rgba(0,0,0,.25);
+@layer base {
+  * {
+    border-color: var(--subtle-border);
+  }
 
-  /* Blur */
-  --blur-bar: 12px; --blur-glass: 64px;
-  --blur-orb: 64px; --blur-orb-lg: 80px;
+  body {
+    font-family: var(--font);
+    background-color: var(--main-bg);
+    color: var(--primary-text);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 
-  /* Motion */
-  --t-fast: 150ms; --t-base: 200ms; --t-slow: 500ms;
+/* Hairline border utilities */
+.hairline-border {
+  border: 1px solid #E8EAF0;
+}
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #E8EAF0;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #C7CBD5;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #E8EAF0 transparent;
 }
 ```
+
+---
+
+## 2. Shell & Layout Architecture
+
+### 2.1 The Two-Column Independent Scroll Pattern
+
+The most common bug in management apps is having the sidebar scroll along with the page content. Management systems must lock the viewport to `100vh` and decouple sidebar scrolling from content scrolling.
+
+```
++-----------------------------------------------------------------------------------+
+|  VIEWPORT: h-screen overflow-hidden flex bg-white                                 |
+|                                                                                   |
+|  +--------------------+  +-----------------------------------------------------+  |
+|  | <Sidebar />        |  | <main className="flex-1 flex flex-col h-full        |  |
+|  |                    |  |       overflow-y-auto custom-scrollbar">            |  |
+|  | - w-64             |  |                                                     |  |
+|  | - h-screen         |  |  +-----------------------------------------------+  |  |
+|  | - sticky top-0     |  |  | <Navbar /> (sticky top-0 h-16 z-30)           |  |  |
+|  | - flex-shrink-0    |  |  +-----------------------------------------------+  |  |
+|  | - overflow-hidden  |  |                                                     |  |
+|  |                    |  |  +-----------------------------------------------+  |  |
+|  |  [Logo & Brand]    |  |  | Page Body: p-6 space-y-5                      |  |  |
+|  |                    |  |  |  - Header with Actions                        |  |  |
+|  |  [Nav Items list]  |  |  |  - Filters / Search Bar                       |  |  |
+|  |   overflow-y-auto  |  |  |  - Data Table or Form                         |  |  |
+|  |   min-h-0          |  |  |  - Pagination                                 |  |  |
+|  |   custom-scrollbar |  |  |  - Footer                                     |  |  |
+|  |                    |  |  +-----------------------------------------------+  |  |
+|  |                    |  |                                                     |  |
+|  +--------------------+  +-----------------------------------------------------+  |
++-----------------------------------------------------------------------------------+
+```
+
+### 2.2 Shell Implementation (`App.tsx`)
+
+```tsx
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Sidebar } from './components/sidebar/sidebar';
+// import your pages...
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      {/* 1. Root Shell: Locked height, no outer page scroll */}
+      <div className="flex h-screen overflow-hidden bg-[#FFFFFF] font-sans text-[#000000]">
+        
+        {/* 2. Independent Sidebar: Stays fixed, scrolls internally if needed */}
+        <Sidebar />
+
+        {/* 3. Main Content: Independent vertical scroll */}
+        <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto bg-[#F8F9FA] custom-scrollbar">
+          <Routes>
+            <Route path="/" element={<Navigate to="/products" replace />} />
+            {/* Page routes */}
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}
+```
+
+### 2.3 Sidebar Implementation (`src/components/sidebar/sidebar.tsx`)
+
+```tsx
+import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { Box, LayoutList, /* ...icons */ } from 'lucide-react';
+
+interface SidebarItem {
+  name: string;
+  path: string;
+  icon: React.ElementType;
+}
+
+const SIDEBAR_ITEMS: SidebarItem[] = [
+  { name: 'Products', path: '/products', icon: Box },
+  { name: 'Category', path: '/category', icon: LayoutList },
+  // ...other routes
+];
+
+export const Sidebar: React.FC = () => {
+  return (
+    <aside className="w-64 bg-[#FFFFFF] h-screen sticky top-0 border-r border-[#E8EAF0] flex flex-col py-5 px-3 select-none flex-shrink-0 overflow-hidden">
+      {/* Brand Header */}
+      <Link
+        to="/products"
+        className="flex items-center gap-3 px-3 pb-5 mb-4 border-b border-[#E8EAF0] hover:opacity-90 transition-opacity group flex-shrink-0"
+      >
+        <img
+          src="/logo.jpeg"
+          alt="LancersLoom Logo"
+          className="w-10 h-10 object-contain rounded-xl p-1"
+        />
+        <div className="min-w-0">
+          <h2 className="font-semibold text-[17px] text-[#000000] leading-tight tracking-[-0.03em] truncate group-hover:text-[#315EFB] transition-colors">
+            LancersLoom
+          </h2>
+          <p className="text-[10px] text-[#526078] tracking-[0.1em] font-semibold mt-0.5 truncate">
+            Management Suite
+          </p>
+        </div>
+      </Link>
+
+      {/* Internal Scrollable Menu: Never scrolls the main page! */}
+      <nav className="flex-1 space-y-1 overflow-y-auto min-h-0 pr-1.5 custom-scrollbar">
+        {SIDEBAR_ITEMS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center gap-3.5 px-4 py-2.5 rounded-lg text-[14px] font-medium tracking-[-0.01em] transition-all duration-200 ${
+                  isActive
+                    ? 'bg-[#315EFB] text-[#FFFFFF] shadow-[0_2px_8px_rgba(49,94,251,0.25)]'
+                    : 'text-[#526078] hover:text-[#000000] hover:bg-[#F5F7FF]'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon
+                    className={`w-4 h-4 flex-shrink-0 transition-colors ${
+                      isActive ? 'text-[#FFFFFF]' : 'text-[#526078]'
+                    }`}
+                    strokeWidth={1.75}
+                  />
+                  <span className="truncate">{item.name}</span>
+                </>
+              )}
+            </NavLink>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+};
+
+export default Sidebar;
+```
+
+---
+
+## 3. Shared Reusable Navbar Component
+
+Instead of repeating navbar markup in every page file, management applications must import `<Navbar />`.
+
+### 3.1 Implementation (`src/components/navbar/navbar.tsx`)
+
+```tsx
+import React, { useState } from 'react';
+import { Search, Maximize2, Mail, Bell, Settings } from 'lucide-react';
+
+export interface NavbarProps {
+  searchTerm?: string;
+  onSearchChange?: (value: string) => void;
+  onAddNew?: () => void;
+  searchPlaceholder?: string;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({
+  searchTerm,
+  onSearchChange,
+  searchPlaceholder = 'Search'
+}) => {
+  const [localSearch, setLocalSearch] = useState('');
+
+  const isControlled = onSearchChange !== undefined;
+  const currentSearchValue = isControlled ? (searchTerm ?? '') : localSearch;
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isControlled) {
+      onSearchChange(e.target.value);
+    } else {
+      setLocalSearch(e.target.value);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  return (
+    <header className="h-16 bg-white border-b border-[#E8EAF0] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 flex-shrink-0">
+      {/* Global Search Bar */}
+      <div className="flex items-center gap-3">
+        <div className="relative w-64 sm:w-80">
+          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder={searchPlaceholder}
+            value={currentSearchValue}
+            onChange={handleSearchChange}
+            className="w-full pl-9 pr-12 py-1.5 bg-gray-50 border border-[#E8EAF0] rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB] focus:bg-white transition-all"
+          />
+          <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
+            ⌘ K
+          </span>
+        </div>
+      </div>
+
+      {/* Right Action Icons & User Avatar */}
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* Fullscreen Toggle */}
+        <button
+          type="button"
+          title="Toggle Fullscreen"
+          onClick={toggleFullscreen}
+          className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+        >
+          <Maximize2 className="w-4 h-4" />
+        </button>
+
+        {/* Mail with Notification Badge */}
+        <div className="relative">
+          <button
+            type="button"
+            title="Messages"
+            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <Mail className="w-4 h-4" />
+          </button>
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            1
+          </span>
+        </div>
+
+        {/* Notification Bell */}
+        <button
+          type="button"
+          title="Notifications"
+          className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+        >
+          <Bell className="w-4 h-4" />
+        </button>
+
+        {/* Settings Gear */}
+        <button
+          type="button"
+          title="Settings"
+          className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+        >
+          <Settings className="w-4 h-4" />
+        </button>
+
+        {/* Profile Avatar */}
+        <div className="flex items-center gap-2 pl-1 border-l border-[#E8EAF0]">
+          <img
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
+            alt="User profile"
+            className="w-8 h-8 rounded-full object-cover border border-[#E8EAF0]"
+          />
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Navbar;
+```
+
+---
+
+## 4. UI Patterns & Component Guidelines
+
+### 4.1 Page Header Toolbar
+
+```tsx
+<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+  <div>
+    <h1 className="text-xl font-bold text-slate-800 tracking-tight">Category List</h1>
+    <p className="text-xs text-slate-500 mt-0.5">Manage your product categories</p>
+  </div>
+
+  <div className="flex items-center gap-2 flex-wrap">
+    {/* PDF export button */}
+    <button className="w-9 h-9 rounded-md bg-white border border-[#E8EAF0] flex items-center justify-center text-red-500 hover:bg-gray-50 shadow-2xs">
+      <FileText className="w-4 h-4" />
+    </button>
+
+    {/* CSV export button */}
+    <button className="w-9 h-9 rounded-md bg-white border border-[#E8EAF0] flex items-center justify-center text-emerald-600 hover:bg-gray-50 shadow-2xs">
+      <FileSpreadsheet className="w-4 h-4" />
+    </button>
+
+    {/* Refresh Button with Cobalt Spinner */}
+    <button onClick={handleRefresh} className="w-9 h-9 rounded-md bg-white border border-[#E8EAF0] flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-50 shadow-2xs">
+      <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#315EFB]' : ''}`} />
+    </button>
+
+    {/* Primary "Add New" Action Button */}
+    <button
+      onClick={() => setIsAddModalOpen(true)}
+      className="flex items-center gap-2 bg-[#315EFB] hover:bg-[#2448D8] text-white px-4 py-2 rounded-md font-semibold text-xs shadow-xs transition-colors"
+    >
+      <Plus className="w-4 h-4" />
+      <span>Add Category</span>
+    </button>
+  </div>
+</div>
+```
+
+### 4.2 Data Table & Selection Highlights
+
+- **Active / Selected Row**: `bg-[#F5F7FF]`
+- **Checkbox Focus / Accent**: `checked:bg-[#315EFB]` or `accent-[#315EFB]`
+- **Header Background**: `bg-[#E9ECEF]/70 text-slate-700 font-semibold border-b border-[#E8EAF0]`
+- **Row Hover**: `hover:bg-slate-50/50`
+- **Action Icons**:
+  - Edit: `hover:text-[#315EFB]`
+  - View: `hover:text-blue-600`
+  - Delete: `hover:text-red-500`
+
+### 4.3 Form Inputs & Dropdowns
+
+- **Base input**: `border border-[#E8EAF0] rounded-md px-3.5 py-2 text-xs font-medium text-slate-700`
+- **Focus state**: `focus:outline-none focus:border-[#315EFB]` (NEVER `focus:border-orange-500`)
+- **Autocomplete / Dropdown hover**: `hover:bg-[#F5F7FF]`
+- **Image Dropzone / Upload area**:
+  - Base: `border-2 border-dashed border-[#E8EAF0] rounded-lg p-6 bg-white text-center cursor-pointer`
+  - Hover: `hover:border-[#315EFB] hover:bg-[#F5F7FF]`
+  - Upload Action Button: `bg-[#315EFB] hover:bg-[#2448D8] text-white text-xs font-semibold px-4 py-2 rounded-md`
+
+### 4.4 Modals & Slide-in Drawers
+
+- **Backdrop**: `fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs`
+- **Modal Card**: `bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-[#E8EAF0] animate-fade-in`
+- **Modal Header**: `px-6 py-4 border-b border-[#E8EAF0] flex items-center justify-between bg-slate-50/50`
+- **Close Button**: `w-7 h-7 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center`
+- **Submit Button**: `px-5 py-2.5 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-md text-xs font-semibold shadow-xs transition-colors`
+- **Cancel Button**: `px-5 py-2.5 bg-[#1D273B] hover:bg-[#111827] text-white rounded-md text-xs font-semibold shadow-xs transition-colors`
+
+### 4.5 Pagination Controls
+
+- **Active Page**: `bg-[#315EFB] text-white shadow-2xs rounded-md w-8 h-8 flex items-center justify-center text-xs font-semibold`
+- **Inactive Page**: `bg-white border border-[#E8EAF0] text-slate-600 hover:bg-gray-50 rounded-md w-8 h-8 flex items-center justify-center text-xs`
+- **Previous / Next buttons**: `w-8 h-8 rounded-md border border-[#E8EAF0] bg-white flex items-center justify-center text-slate-500 hover:text-slate-800 disabled:opacity-40`
+
+### 4.6 Floating Quick Settings Cog
+
+Every management screen contains the floating quick settings trigger on the right screen edge:
+```tsx
+<div className="fixed right-0 top-1/2 -translate-y-1/2 z-40">
+  <button
+    type="button"
+    title="Quick Settings"
+    onClick={() => alert('Quick Settings Panel')}
+    className="w-9 h-9 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
+  >
+    <Settings className="w-4 h-4 animate-spin-slow" />
+  </button>
+</div>
+```
+
+---
+
+## Antigravity AI Agent Migration Playbook
+
+> **Instructions for Antigravity AI**: When instructed by the user to "apply design.md" or "migrate to LancersLoom management style" on an already-started repository, execute these 6 systematic phases in order:
+
+### Phase 1: CSS & Tokens Setup
+1. Verify and update `src/index.css`:
+   - Add the CSS variables (`--primary-accent: #315EFB`, `--primary-accent-hover: #2448D8`, `--light-accent-bg: #F5F7FF`, `--primary-text: #000000`, `--secondary-text: #526078`, `--main-bg: #FFFFFF`, `--subtle-border: #E8EAF0`).
+   - Add `.custom-scrollbar` and `.hairline-border` rules.
+2. Ensure Tailwind CSS v4 or v3 is properly linked.
+
+### Phase 2: Shell Architecture & Independent Sidebar Fix
+1. Inspect `src/App.tsx`:
+   - Set the root wrapper to `<div className="flex h-screen overflow-hidden bg-[#FFFFFF] font-sans text-[#000000]">`.
+   - Wrap the page routes in `<main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto bg-[#F8F9FA] custom-scrollbar">`.
+2. Inspect `src/components/sidebar/sidebar.tsx`:
+   - Set outer container to `<aside className="w-64 bg-[#FFFFFF] h-screen sticky top-0 border-r border-[#E8EAF0] flex flex-col py-5 px-3 select-none flex-shrink-0 overflow-hidden">`.
+   - Set navigation container to `<nav className="flex-1 space-y-1 overflow-y-auto min-h-0 pr-1.5 custom-scrollbar">`.
+   - Set active NavLink class to `bg-[#315EFB] text-[#FFFFFF] shadow-[0_2px_8px_rgba(49,94,251,0.25)]`.
+   - Set inactive hover to `text-[#526078] hover:text-[#000000] hover:bg-[#F5F7FF]`.
+   - Confirm the sidebar **does not scroll when the page content scrolls**.
+
+### Phase 3: Shared Navbar Extraction & Integration
+1. Ensure `src/components/navbar/navbar.tsx` exists with:
+   - Fullscreen toggle, Messages mail button, Notifications bell, Settings icon, Profile avatar.
+   - Global search input with `⌘ K` badge and `focus:border-[#315EFB]`.
+   - Clean export (`export const Navbar`, `export default Navbar`).
+2. Scan all page files (`src/pages/**/*.tsx`):
+   - Remove any inline `<header>` markup or copy-pasted top navbar code.
+   - Insert `<Navbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />` at the top of each page component.
+
+### Phase 4: Complete Orange Color Purge (Target: 0 Occurrences)
+1. Run a case-insensitive grep across `src` for:
+   - `orange`
+   - `#FF7034`
+   - `#E85B20`
+   - `bg-orange-`
+   - `text-orange-`
+   - `border-orange-`
+2. Perform replacements:
+   - `bg-[#FF7034] hover:bg-[#E85B20]` → `bg-[#315EFB] hover:bg-[#2448D8]`
+   - `text-orange-500` / `text-orange-600` → `text-[#315EFB]`
+   - `focus:border-orange-500` → `focus:border-[#315EFB]`
+   - `hover:border-orange-400` → `hover:border-[#315EFB]`
+   - `hover:bg-orange-50` / `hover:bg-orange-50/60` → `hover:bg-[#F5F7FF]`
+   - `bg-orange-50` / `bg-orange-100` → `bg-[#F5F7FF]`
+   - Checkbox rings and radio rings → `#315EFB`
+   - Floating settings cog → `bg-[#315EFB] hover:bg-[#2448D8]`
+
+### Phase 5: Table, Modal, and Form Standardization
+1. In all data tables:
+   - Selected row background → `bg-[#F5F7FF]`.
+   - Action icon hovers → `hover:text-[#315EFB]`.
+   - Pagination active button → `bg-[#315EFB] text-white`.
+2. In all modals:
+   - Submit button → `bg-[#315EFB] hover:bg-[#2448D8] text-white`.
+   - Inputs focus → `focus:border-[#315EFB]`.
+   - Image upload dropzone hover → `hover:border-[#315EFB] hover:bg-[#F5F7FF]`.
+
+### Phase 6: Quality, Build & Deployment Verification
+1. Run `grep` across `src` to confirm **0** matches for `orange`, `FF7034`, `E85B20`.
+2. Run `npm run build` (`tsc -b && vite build`) to confirm:
+   - Zero TypeScript compilation errors (`TS6133`, `TS2304`, etc.).
+   - Zero module resolution errors.
+3. Run `npm run lint` (`oxlint` or `eslint`) to ensure zero lint errors.
+4. **Hosting / SPA Reload Fix (`vercel.json`)**:
+   Ensure `vercel.json` exists in project root so reloading any screen (e.g. `/products`, `/create-product`) routes to `index.html` without 404 errors:
+   ```json
+   {
+     "rewrites": [
+       {
+         "source": "/(.*)",
+         "destination": "/index.html"
+       }
+     ]
+   }
+   ```
+
+---
+
+## 5. Verification Checklist Table
+
+| Item | Requirement | Verification Command / Check |
+|------|-------------|------------------------------|
+| **Accent Color** | Only Electric Cobalt Blue `#315EFB` | Grep for `FF7034`, `E85B20`, `orange` in `src` (must return 0) |
+| **Hover Color** | `#2448D8` on buttons & badges | Inspect primary buttons |
+| **Light BG** | `#F5F7FF` on row selects & hovers | Inspect table row selects & nav hover |
+| **Sidebar Scroll** | Independent from main page scroll | Scroll page; sidebar must remain stationary |
+| **Sidebar Overflow**| Has internal scroll if items exceed 100vh | `<nav className="... overflow-y-auto min-h-0 ...">` |
+| **Navbar** | Single shared `<Navbar />` component | No duplicate `<header className="h-16...">` in pages |
+| **SPA Reload** | `vercel.json` SPA rewrite configured | Verify `vercel.json` routes `/(.*)` to `/index.html` |
+| **Build Status** | Zero errors | `npm run build` exits with code 0 |
+| **Lint Status** | Zero errors | `npm run lint` exits with code 0 |

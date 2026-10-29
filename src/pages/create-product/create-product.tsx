@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 import {
-  Search,
   PlusCircle,
   RotateCw,
   ChevronUp,
   ChevronDown,
   ArrowLeft,
-  Maximize2,
-  Mail,
-  Bell,
   Settings,
-  Store,
-  CreditCard,
   Info,
   BadgePercent,
   Image as ImageIcon,
@@ -237,121 +232,8 @@ export default function CreateProductPage() {
         </div>
       )}
 
-      {/* TOP NAVBAR (Exact match from screenshots) */}
-      <header className="h-16 bg-white border-b border-gray-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
-        {/* Left Search Bar */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-64 sm:w-80">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full pl-9 pr-12 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-all"
-            />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
-              ⌘ K
-            </span>
-          </div>
-        </div>
-
-        {/* Right Action Icons & User Controls */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Freshmart Branch Selector */}
-          <button
-            type="button"
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] rounded-md text-xs font-semibold hover:bg-emerald-100 transition-colors"
-          >
-            <Store className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Freshmart</span>
-            <ChevronDown className="w-3.5 h-3.5 ml-1 text-emerald-700" />
-          </button>
-
-          {/* + Add New Button (Orange) */}
-          <button
-            type="button"
-            onClick={handleResetForm}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Add New</span>
-          </button>
-
-          {/* POS Button (Dark Navy) */}
-          <button
-            type="button"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1D273B] hover:bg-[#111827] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>POS</span>
-          </button>
-
-          {/* Language Flag */}
-          <button
-            type="button"
-            title="Language"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-sm"
-          >
-            🇺🇸
-          </button>
-
-          {/* Fullscreen Toggle */}
-          <button
-            type="button"
-            title="Toggle Fullscreen"
-            onClick={() => {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-              } else {
-                document.exitFullscreen().catch(() => {});
-              }
-            }}
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Maximize2 className="w-4 h-4" />
-          </button>
-
-          {/* Mail with Badge */}
-          <div className="relative">
-            <button
-              type="button"
-              title="Messages"
-              className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-            >
-              <Mail className="w-4 h-4" />
-            </button>
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-              1
-            </span>
-          </div>
-
-          {/* Notification Bell */}
-          <button
-            type="button"
-            title="Notifications"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-
-          {/* Settings Gear */}
-          <button
-            type="button"
-            title="Settings"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-
-          {/* User Profile Avatar */}
-          <div className="flex items-center gap-2 pl-1 border-l border-gray-200">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
-              alt="User profile"
-              className="w-8 h-8 rounded-full object-cover border border-gray-300"
-            />
-          </div>
-        </div>
-      </header>
+      {/* TOP NAVBAR */}
+      <Navbar onAddNew={handleResetForm} />
 
       {/* PAGE BODY */}
       <div className="p-6 flex-1 space-y-5">
@@ -409,7 +291,7 @@ export default function CreateProductPage() {
               className="px-5 py-4 border-b border-gray-100 flex items-center justify-between cursor-pointer select-none bg-white hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF7034] flex items-center justify-center text-xs">
+                <div className="w-6 h-6 rounded-full bg-[#F5F7FF] text-[#315EFB] flex items-center justify-center text-xs">
                   <Info className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="font-bold text-sm text-slate-800">Product Information</h2>
@@ -431,7 +313,7 @@ export default function CreateProductPage() {
                       <select
                         value={store}
                         onChange={(e) => setStore(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Freshmart - Main">Freshmart - Main</option>
@@ -450,7 +332,7 @@ export default function CreateProductPage() {
                       <select
                         value={warehouse}
                         onChange={(e) => setWarehouse(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Bay 4A-12">Bay 4A-12</option>
@@ -475,7 +357,7 @@ export default function CreateProductPage() {
                       placeholder="e.g. iPhone 14 Pro Max"
                       value={productName}
                       onChange={(e) => handleNameChange(e.target.value)}
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
 
@@ -489,7 +371,7 @@ export default function CreateProductPage() {
                       placeholder="e.g. iphone-14-pro-max"
                       value={slug}
                       onChange={(e) => setSlug(e.target.value)}
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
                 </div>
@@ -507,12 +389,12 @@ export default function CreateProductPage() {
                         placeholder="e.g. PT015"
                         value={sku}
                         onChange={(e) => setSku(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-24 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                        className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-24 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                       />
                       <button
                         type="button"
                         onClick={handleGenerateSku}
-                        className="absolute right-1.5 px-3 py-1 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded text-[11px] font-semibold transition-colors"
+                        className="absolute right-1.5 px-3 py-1 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded text-[11px] font-semibold transition-colors"
                       >
                         Generate
                       </button>
@@ -527,7 +409,7 @@ export default function CreateProductPage() {
                       <select
                         value={sellingType}
                         onChange={(e) => setSellingType(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Transactional">Transactional</option>
@@ -556,7 +438,7 @@ export default function CreateProductPage() {
                             showToast(`Added category: ${newCat}`);
                           }
                         }}
-                        className="text-[#FF7034] hover:underline flex items-center gap-1 font-semibold text-[11px]"
+                        className="text-[#315EFB] hover:underline flex items-center gap-1 font-semibold text-[11px]"
                       >
                         <PlusCircle className="w-3.5 h-3.5" />
                         <span>Add New</span>
@@ -566,7 +448,7 @@ export default function CreateProductPage() {
                       <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Computers">Computers</option>
@@ -589,7 +471,7 @@ export default function CreateProductPage() {
                       <select
                         value={subCategory}
                         onChange={(e) => setSubCategory(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Smartphones">Smartphones</option>
@@ -613,7 +495,7 @@ export default function CreateProductPage() {
                       <select
                         value={brand}
                         onChange={(e) => setBrand(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Apple">Apple</option>
@@ -640,7 +522,7 @@ export default function CreateProductPage() {
                       <select
                         value={unit}
                         onChange={(e) => setUnit(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Pc">Pc</option>
@@ -665,7 +547,7 @@ export default function CreateProductPage() {
                       <select
                         value={barcodeSymbology}
                         onChange={(e) => setBarcodeSymbology(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Code 128">Code 128</option>
@@ -688,12 +570,12 @@ export default function CreateProductPage() {
                         placeholder="Scan or enter item barcode"
                         value={itemBarcode}
                         onChange={(e) => setItemBarcode(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-24 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                        className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-24 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                       />
                       <button
                         type="button"
                         onClick={handleGenerateBarcode}
-                        className="absolute right-1.5 px-3 py-1 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded text-[11px] font-semibold transition-colors"
+                        className="absolute right-1.5 px-3 py-1 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded text-[11px] font-semibold transition-colors"
                       >
                         Generate
                       </button>
@@ -704,7 +586,7 @@ export default function CreateProductPage() {
                 {/* Row 7: Description (Rich Text Editor style) */}
                 <div>
                   <label className="block font-semibold text-slate-700 mb-1.5">Description</label>
-                  <div className="border border-gray-200 rounded-md overflow-hidden bg-white focus-within:border-orange-500 transition-colors">
+                  <div className="border border-gray-200 rounded-md overflow-hidden bg-white focus-within:border-[#315EFB] transition-colors">
                     {/* Editor Toolbar */}
                     <div className="flex items-center gap-1.5 p-2 border-b border-gray-200 bg-gray-50/80 text-gray-600">
                       <select className="bg-transparent text-xs text-gray-700 border-none focus:outline-none cursor-pointer pr-2">
@@ -806,7 +688,7 @@ export default function CreateProductPage() {
               className="px-5 py-4 border-b border-gray-100 flex items-center justify-between cursor-pointer select-none bg-white hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF7034] flex items-center justify-center text-xs">
+                <div className="w-6 h-6 rounded-full bg-[#F5F7FF] text-[#315EFB] flex items-center justify-center text-xs">
                   <BadgePercent className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="font-bold text-sm text-slate-800">Pricing & Stocks</h2>
@@ -831,7 +713,7 @@ export default function CreateProductPage() {
                         value="single"
                         checked={productType === 'single'}
                         onChange={() => setProductType('single')}
-                        className="w-4 h-4 text-orange-500 accent-orange-500 cursor-pointer"
+                        className="w-4 h-4 text-[#315EFB] accent-[#315EFB] cursor-pointer"
                       />
                       <span>Single Product</span>
                     </label>
@@ -843,7 +725,7 @@ export default function CreateProductPage() {
                         value="variable"
                         checked={productType === 'variable'}
                         onChange={() => setProductType('variable')}
-                        className="w-4 h-4 text-orange-500 accent-orange-500 cursor-pointer"
+                        className="w-4 h-4 text-[#315EFB] accent-[#315EFB] cursor-pointer"
                       />
                       <span>Variable Product</span>
                     </label>
@@ -863,7 +745,7 @@ export default function CreateProductPage() {
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="e.g. 50"
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
 
@@ -878,7 +760,7 @@ export default function CreateProductPage() {
                       value={price}
                       onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="e.g. 699"
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
 
@@ -890,7 +772,7 @@ export default function CreateProductPage() {
                       <select
                         value={taxType}
                         onChange={(e) => setTaxType(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Exclusive">Exclusive</option>
@@ -912,7 +794,7 @@ export default function CreateProductPage() {
                       <select
                         value={tax}
                         onChange={(e) => setTax(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="GST 18%">GST 18%</option>
@@ -933,7 +815,7 @@ export default function CreateProductPage() {
                       <select
                         value={discountType}
                         onChange={(e) => setDiscountType(e.target.value)}
-                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                        className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                       >
                         <option value="">Select</option>
                         <option value="Percentage (%)">Percentage (%)</option>
@@ -954,7 +836,7 @@ export default function CreateProductPage() {
                       value={discountValue}
                       onChange={(e) => setDiscountValue(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="e.g. 5"
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
                 </div>
@@ -971,7 +853,7 @@ export default function CreateProductPage() {
                       value={quantityAlert}
                       onChange={(e) => setQuantityAlert(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="e.g. 10"
-                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                      className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                     />
                   </div>
                 </div>
@@ -986,7 +868,7 @@ export default function CreateProductPage() {
               className="px-5 py-4 border-b border-gray-100 flex items-center justify-between cursor-pointer select-none bg-white hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF7034] flex items-center justify-center text-xs">
+                <div className="w-6 h-6 rounded-full bg-[#F5F7FF] text-[#315EFB] flex items-center justify-center text-xs">
                   <ImageIcon className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="font-bold text-sm text-slate-800">Images</h2>
@@ -1000,11 +882,11 @@ export default function CreateProductPage() {
               <div className="p-5 text-xs">
                 <div className="flex flex-wrap items-center gap-4">
                   {/* Upload Box */}
-                  <label className="w-28 h-28 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-400 hover:bg-orange-50/30 transition-all text-center p-2 group">
-                    <div className="w-7 h-7 rounded-full bg-gray-100 group-hover:bg-orange-100 text-gray-500 group-hover:text-[#FF7034] flex items-center justify-center mb-1.5 transition-colors">
+                  <label className="w-28 h-28 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#315EFB] hover:bg-[#F5F7FF]/50 transition-all text-center p-2 group">
+                    <div className="w-7 h-7 rounded-full bg-gray-100 group-hover:bg-[#F5F7FF] text-gray-500 group-hover:text-[#315EFB] flex items-center justify-center mb-1.5 transition-colors">
                       <PlusCircle className="w-4 h-4" />
                     </div>
-                    <span className="text-[11px] font-semibold text-gray-600 group-hover:text-[#FF7034] transition-colors">
+                    <span className="text-[11px] font-semibold text-gray-600 group-hover:text-[#315EFB] transition-colors">
                       Add Images
                     </span>
                     <input
@@ -1050,7 +932,7 @@ export default function CreateProductPage() {
               className="px-5 py-4 border-b border-gray-100 flex items-center justify-between cursor-pointer select-none bg-white hover:bg-gray-50/50 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-orange-100 text-[#FF7034] flex items-center justify-center text-xs">
+                <div className="w-6 h-6 rounded-full bg-[#F5F7FF] text-[#315EFB] flex items-center justify-center text-xs">
                   <SlidersHorizontal className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="font-bold text-sm text-slate-800">Custom Fields</h2>
@@ -1069,7 +951,7 @@ export default function CreateProductPage() {
                       type="checkbox"
                       checked={showWarranties}
                       onChange={(e) => setShowWarranties(e.target.checked)}
-                      className="rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                      className="rounded border-gray-300 text-[#315EFB] focus:ring-[#315EFB] cursor-pointer"
                     />
                     <span>Warranties</span>
                   </label>
@@ -1079,7 +961,7 @@ export default function CreateProductPage() {
                       type="checkbox"
                       checked={showManufacturer}
                       onChange={(e) => setShowManufacturer(e.target.checked)}
-                      className="rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                      className="rounded border-gray-300 text-[#315EFB] focus:ring-[#315EFB] cursor-pointer"
                     />
                     <span>Manufacturer</span>
                   </label>
@@ -1089,7 +971,7 @@ export default function CreateProductPage() {
                       type="checkbox"
                       checked={showExpiry}
                       onChange={(e) => setShowExpiry(e.target.checked)}
-                      className="rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                      className="rounded border-gray-300 text-[#315EFB] focus:ring-[#315EFB] cursor-pointer"
                     />
                     <span>Expiry</span>
                   </label>
@@ -1106,7 +988,7 @@ export default function CreateProductPage() {
                         <select
                           value={warranty}
                           onChange={(e) => setWarranty(e.target.value)}
-                          className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer"
+                          className="w-full appearance-none bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                         >
                           <option value="">Select</option>
                           <option value="No Warranty">No Warranty</option>
@@ -1131,7 +1013,7 @@ export default function CreateProductPage() {
                         placeholder="e.g. Foxconn Technology Group"
                         value={manufacturer}
                         onChange={(e) => setManufacturer(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                        className="w-full bg-white border border-gray-200 rounded-md px-3 py-2 text-xs text-slate-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB]"
                       />
                     </div>
                   )}
@@ -1147,7 +1029,7 @@ export default function CreateProductPage() {
                             type="date"
                             value={manufacturedDate}
                             onChange={(e) => setManufacturedDate(e.target.value)}
-                            className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-8 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500"
+                            className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-8 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB]"
                           />
                           <Calendar className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>
@@ -1162,7 +1044,7 @@ export default function CreateProductPage() {
                             type="date"
                             value={expiryDate}
                             onChange={(e) => setExpiryDate(e.target.value)}
-                            className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-8 py-2 text-xs text-slate-800 focus:outline-none focus:border-orange-500"
+                            className="w-full bg-white border border-gray-200 rounded-md pl-3 pr-8 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#315EFB]"
                           />
                           <Calendar className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>
@@ -1185,10 +1067,10 @@ export default function CreateProductPage() {
               Cancel
             </button>
 
-            {/* Add Product Button (Orange) */}
+            {/* Add Product Button (Cobalt) */}
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-md bg-[#FF7034] hover:bg-[#E85B20] text-white text-xs font-semibold shadow-xs transition-colors"
+              className="px-6 py-2.5 rounded-md bg-[#315EFB] hover:bg-[#2448D8] text-white text-xs font-semibold shadow-xs transition-colors"
             >
               Add Product
             </button>
@@ -1208,7 +1090,7 @@ export default function CreateProductPage() {
           type="button"
           title="Quick Settings"
           onClick={() => alert('Quick Settings Panel')}
-          className="w-9 h-9 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
+          className="w-9 h-9 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
         >
           <Settings className="w-4 h-4 animate-spin-slow" />
         </button>

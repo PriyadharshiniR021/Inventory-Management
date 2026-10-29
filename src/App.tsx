@@ -17,12 +17,12 @@ import PrintQrCodePage from './pages/print-qr-code/print-qr-code';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen bg-[#F7F7F5] font-sans text-[#111111]">
+      <div className="flex h-screen overflow-hidden bg-[#FFFFFF] font-sans text-[#000000]">
         {/* Sidebar Alone */}
         <Sidebar />
 
         {/* Content Area for building pages one by one */}
-        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#F8F9FA]">
+        <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto bg-[#F8F9FA] custom-scrollbar">
 
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />

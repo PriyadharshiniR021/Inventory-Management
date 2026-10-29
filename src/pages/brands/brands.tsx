@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 import {
   Search,
   PlusCircle,
@@ -8,12 +8,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Maximize2,
-  Mail,
-  Bell,
-  Settings,
-  Store,
-  CreditCard,
   FileText,
   FileSpreadsheet,
   Edit,
@@ -21,7 +15,8 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
-  UploadCloud
+  UploadCloud,
+  Settings
 } from 'lucide-react';
 
 interface BrandItem {
@@ -119,7 +114,6 @@ const INITIAL_BRANDS: BrandItem[] = [
 ];
 
 export default function BrandsPage() {
-  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load from localStorage or initial
@@ -354,123 +348,8 @@ export default function BrandsPage() {
         </div>
       )}
 
-      {/* TOP NAVBAR (Exact match across application) */}
-      <header className="h-16 bg-white border-b border-gray-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
-        {/* Left Search Bar */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-64 sm:w-80">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-12 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-all"
-            />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
-              ⌘ K
-            </span>
-          </div>
-        </div>
-
-        {/* Right Action Icons & User Controls */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Freshmart Branch Selector */}
-          <button
-            type="button"
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] rounded-md text-xs font-semibold hover:bg-emerald-100 transition-colors"
-          >
-            <Store className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Freshmart</span>
-            <ChevronDown className="w-3.5 h-3.5 ml-1 text-emerald-700" />
-          </button>
-
-          {/* + Add New Button (Orange) */}
-          <button
-            type="button"
-            onClick={() => navigate('/create-product')}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Add New</span>
-          </button>
-
-          {/* POS Button (Dark Navy) */}
-          <button
-            type="button"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1D273B] hover:bg-[#111827] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>POS</span>
-          </button>
-
-          {/* Language Flag */}
-          <button
-            type="button"
-            title="Language"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-sm"
-          >
-            🇺🇸
-          </button>
-
-          {/* Fullscreen Toggle */}
-          <button
-            type="button"
-            title="Toggle Fullscreen"
-            onClick={() => {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-              } else {
-                document.exitFullscreen().catch(() => {});
-              }
-            }}
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Maximize2 className="w-4 h-4" />
-          </button>
-
-          {/* Mail with Badge */}
-          <div className="relative">
-            <button
-              type="button"
-              title="Messages"
-              className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-            >
-              <Mail className="w-4 h-4" />
-            </button>
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-              1
-            </span>
-          </div>
-
-          {/* Notification Bell */}
-          <button
-            type="button"
-            title="Notifications"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-
-          {/* Settings Gear */}
-          <button
-            type="button"
-            title="Settings"
-            className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center text-gray-500 hover:text-gray-800"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-
-          {/* User Profile Avatar */}
-          <div className="flex items-center gap-2 pl-1 border-l border-gray-200">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
-              alt="User profile"
-              className="w-8 h-8 rounded-full object-cover border border-gray-300"
-            />
-          </div>
-        </div>
-      </header>
+      {/* TOP NAVBAR */}
+      <Navbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       {/* PAGE BODY */}
       <div className="p-6 flex-1 space-y-4">
@@ -510,7 +389,7 @@ export default function BrandsPage() {
               title="Refresh Data"
               className="w-9 h-9 rounded-md bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-50 shadow-2xs transition-colors"
             >
-              <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-orange-500' : ''}`} />
+              <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#315EFB]' : ''}`} />
             </button>
 
             {/* Collapse/Expand Filters */}
@@ -523,11 +402,11 @@ export default function BrandsPage() {
               {showFilterCard ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
 
-            {/* + Add Brand (Orange Button) */}
+            {/* + Add Brand (Cobalt Button) */}
             <button
               type="button"
               onClick={openAddModal}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Add Brand</span>
@@ -551,7 +430,7 @@ export default function BrandsPage() {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full pl-9 pr-3 py-1.5 bg-white border border-gray-200 rounded-md text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full pl-9 pr-3 py-1.5 bg-white border border-gray-200 rounded-md text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#315EFB] transition-colors"
                 />
               </div>
 
@@ -565,7 +444,7 @@ export default function BrandsPage() {
                       setStatusFilter(e.target.value as any);
                       setCurrentPage(1);
                     }}
-                    className="appearance-none bg-white border border-gray-200 rounded-md text-xs font-medium text-gray-700 pl-3 pr-8 py-1.5 hover:border-gray-300 focus:outline-none focus:border-orange-500 cursor-pointer"
+                    className="appearance-none bg-white border border-gray-200 rounded-md text-xs font-medium text-gray-700 pl-3 pr-8 py-1.5 hover:border-gray-300 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                   >
                     <option value="All">Status</option>
                     <option value="Active">Active</option>
@@ -579,7 +458,7 @@ export default function BrandsPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-gray-200 rounded-md text-xs font-medium text-gray-700 pl-3 pr-8 py-1.5 hover:border-gray-300 focus:outline-none focus:border-orange-500 cursor-pointer"
+                    className="appearance-none bg-white border border-gray-200 rounded-md text-xs font-medium text-gray-700 pl-3 pr-8 py-1.5 hover:border-gray-300 focus:outline-none focus:border-[#315EFB] cursor-pointer"
                   >
                     <option value="Latest">Sort By : Latest</option>
                     <option value="Oldest">Sort By : Oldest</option>
@@ -605,7 +484,7 @@ export default function BrandsPage() {
                         paginatedBrands.every((b) => selectedIds.includes(b.id))
                       }
                       onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                      className="rounded border-gray-300 text-[#315EFB] focus:ring-[#315EFB] cursor-pointer"
                     />
                   </th>
                   <th className="py-3 px-4 font-semibold text-slate-700">Brand</th>
@@ -632,7 +511,7 @@ export default function BrandsPage() {
                       <tr
                         key={brand.id}
                         className={`hover:bg-[#F9FAFC] transition-colors ${
-                          isSelected ? 'bg-orange-50/40' : ''
+                          isSelected ? 'bg-[#F5F7FF]' : ''
                         }`}
                       >
                         {/* Checkbox */}
@@ -641,7 +520,7 @@ export default function BrandsPage() {
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => handleSelectOne(brand.id)}
-                            className="rounded border-gray-300 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                            className="rounded border-gray-300 text-[#315EFB] focus:ring-[#315EFB] cursor-pointer"
                           />
                         </td>
 
@@ -686,7 +565,7 @@ export default function BrandsPage() {
                               type="button"
                               onClick={() => openEditModal(brand)}
                               title="Edit Brand"
-                              className="w-7 h-7 rounded border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-orange-600 hover:border-orange-300 transition-colors"
+                              className="w-7 h-7 rounded border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-[#315EFB] hover:border-[#315EFB] transition-colors"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
@@ -722,7 +601,7 @@ export default function BrandsPage() {
                     setRowsPerPage(Number(e.target.value));
                     setCurrentPage(1);
                   }}
-                  className="bg-white border border-gray-200 rounded px-2.5 py-1 text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-orange-500"
+                  className="bg-white border border-gray-200 rounded px-2.5 py-1 text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:border-[#315EFB]"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -731,7 +610,7 @@ export default function BrandsPage() {
               </div>
               <span>Entries</span>
               {selectedIds.length > 0 && (
-                <span className="ml-3 font-semibold text-orange-600">
+                <span className="ml-3 font-semibold text-[#315EFB]">
                   {selectedIds.length} row(s) selected
                 </span>
               )}
@@ -758,7 +637,7 @@ export default function BrandsPage() {
                     onClick={() => setCurrentPage(pageNum)}
                     className={`w-7 h-7 rounded text-xs font-bold transition-colors ${
                       isActive
-                        ? 'bg-[#FF7034] text-white shadow-xs'
+                        ? 'bg-[#315EFB] text-white shadow-xs'
                         : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -792,7 +671,7 @@ export default function BrandsPage() {
           type="button"
           title="Quick Settings"
           onClick={() => alert('Quick Settings Panel')}
-          className="w-9 h-9 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
+          className="w-9 h-9 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-l-md flex items-center justify-center shadow-lg transition-transform hover:-translate-x-0.5"
         >
           <Settings className="w-4 h-4 animate-spin-slow" />
         </button>
@@ -822,14 +701,14 @@ export default function BrandsPage() {
                 {/* Upload Box with Dashed Border */}
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-400 hover:bg-orange-50/20 transition-all text-center p-2 bg-gray-50/50 group overflow-hidden"
+                  className="w-24 h-24 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#315EFB] hover:bg-[#F5F7FF]/50 transition-all text-center p-2 bg-gray-50/50 group overflow-hidden"
                 >
                   {formImage ? (
                     <img src={formImage} alt="Preview" className="w-full h-full object-contain rounded-lg" />
                   ) : (
                     <>
-                      <PlusCircle className="w-5 h-5 text-gray-400 group-hover:text-orange-500 mb-1 transition-colors" />
-                      <span className="text-[11px] font-medium text-gray-500 group-hover:text-orange-500">
+                      <PlusCircle className="w-5 h-5 text-gray-400 group-hover:text-[#315EFB] mb-1 transition-colors" />
+                      <span className="text-[11px] font-medium text-gray-500 group-hover:text-[#315EFB]">
                         Add Image
                       </span>
                     </>
@@ -840,7 +719,7 @@ export default function BrandsPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#FF7034] hover:bg-[#E85B20] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#315EFB] hover:bg-[#2448D8] text-white rounded-md text-xs font-semibold shadow-xs transition-colors"
                   >
                     <UploadCloud className="w-3.5 h-3.5" />
                     <span>Upload Image</span>
@@ -867,7 +746,7 @@ export default function BrandsPage() {
                   placeholder="Enter brand name"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-orange-500 text-slate-800 placeholder-gray-400"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-[#315EFB] text-slate-800 placeholder-gray-400"
                 />
               </div>
 
@@ -902,7 +781,7 @@ export default function BrandsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-md bg-[#FF7034] hover:bg-[#E85B20] text-white text-xs font-semibold shadow-xs transition-colors"
+                  className="px-5 py-2 rounded-md bg-[#315EFB] hover:bg-[#2448D8] text-white text-xs font-semibold shadow-xs transition-colors"
                 >
                   {editingBrand ? 'Save Changes' : 'Add Brand'}
                 </button>

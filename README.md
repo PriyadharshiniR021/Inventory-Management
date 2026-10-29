@@ -1,67 +1,158 @@
-# NexusStock — Inventory Management System
+# LancersLoom — Inventory Management System
 
-A high-performance **React 19 + TypeScript (TSX)** web application styled with modern **Tailwind CSS v4** and bundled with **Vite 8**.
+A state-of-the-art **React 19 + TypeScript** enterprise inventory management platform built with **Vite 8** and styled with **Tailwind CSS v4**, adhering to the LancersLoom Management Software Design System.
 
 ---
 
 ## ⚡ Tech Stack
 
 - **Framework**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Bundler**: [Vite 8](https://vite.dev/)
+- **Routing**: [React Router v7](https://reactrouter.com/)
+- **Bundler & Tooling**: [Vite 8](https://vite.dev/)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with `@tailwindcss/vite`
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Typography**: Google Fonts (*Plus Jakarta Sans* & *JetBrains Mono*)
+- **Linter**: [Oxlint](https://oxc.rs/docs/guide/usage/linter.html)
+- **Deployment**: [Vercel](https://vercel.com/) with SPA rewrite configuration
 
 ---
 
-## 🚀 Getting Started
+## 🎨 Design System & Visual Identity
 
-### 1. Install Dependencies
-```bash
-npm install
-```
+The interface features an editorial, high-precision aesthetic powered by Electric Cobalt Blue:
 
-### 2. Run the Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+- **Primary Accent**: `#315EFB` (Electric Cobalt Blue)
+- **Primary Hover**: `#2448D8`
+- **Light Accent Background**: `#F5F7FF` (Row selection, dropdown options, and hover highlights)
+- **Primary Text**: `#000000` / `#0F172A`
+- **Secondary Text**: `#526078`
+- **Main Canvas**: `#FFFFFF` with `#F8F9FA` background
+- **Hairline Borders**: `#E8EAF0`
+- **Absolute Color Rule**: Zero orange anywhere across the application.
+- **Documentation**: See [design.md](file:///home/ashwin/Downloads/Antigravity%20IDE/LL/IM/Inventory-Management/design.md) for complete design tokens and the Antigravity migration guide.
 
-### 3. Production Build
-```bash
-npm run build
-```
+---
+
+## 🧩 Shell & Layout Architecture
+
+- **Independent Two-Column Shell**: The sidebar is fixed (`h-screen sticky top-0`) and scrolls internally if navigation links overflow the viewport height. It **never scrolls when the page content scrolls**.
+- **Unified Reusable Navbar**: A single shared `<Navbar />` component across all pages provides global search (⌘K shortcut), fullscreen toggle, message badge counter, notification center, quick settings, and user profile management.
+- **Page Layout**: Clean modular structure featuring standard headers, export actions (PDF, CSV, Print), search/filter toolbars, responsive tables with selection states, and floating settings cog.
+
+---
+
+## 📦 Modules & Screens
+
+| Route | Module | Features |
+|-------|--------|----------|
+| `/products` | **Product List** | Paginated catalog, advanced search, stock badges, bulk actions, barcode generation |
+| `/create-product` | **Create Product** | Multi-section product creator with SKU auto-generator, tax calculator, dropzone image upload |
+| `/expired-products`| **Expired Products** | Batch tracking, expiry warning indicators, purge actions |
+| `/low-stocks` | **Low Stocks** | Real-time threshold monitoring, out-of-stock tabs, email supplier triggers |
+| `/category` | **Categories** | Category hierarchy management, image uploads, active product counters |
+| `/sub-category` | **Sub Categories** | Nested taxonomy management linked to parent categories |
+| `/brands` | **Brands** | Brand registry with logo uploads and status toggles |
+| `/units` | **Units** | Measurement units (Kg, Pc, Ltr, etc.) and short-code designations |
+| `/variant-attributes` | **Variant Attributes** | Attribute options (Sizes, Colors, Materials) for multi-SKU variants |
+| `/warranties` | **Warranties** | Warranty periods, claim terms, and coverage definitions |
+| `/print-barcode` | **Print Barcode** | Warehouse/store selector, quantity stepper, paper size selector, vector barcode generation |
+| `/print-qr-code` | **Print QR Code** | High-density 2D QR code generator with batch label print preview modal |
 
 ---
 
 ## 📁 Project Architecture
 
 ```
-├── public/                 # Static assets
+├── public/                     # Static assets (logo, icons, images)
 ├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── ActivityLogView.tsx   # Audit & stock logs
-│   │   ├── Navbar.tsx            # Navigation & header actions
-│   │   ├── ProductModal.tsx      # Add/edit product modal
-│   │   ├── ProductTable.tsx      # Interactive search, filter & data table
-│   │   └── StatsOverview.tsx     # KPI metrics & valuation cards
-│   ├── data/
-│   │   └── mockProducts.ts       # Initial inventory data & activity logs
-│   ├── types/
-│   │   └── inventory.ts          # TypeScript interfaces & types
-│   ├── App.tsx             # Main dashboard controller
-│   ├── index.css           # Tailwind v4 import & custom styles
-│   └── main.tsx            # React application entrypoint
-├── index.html              # HTML shell & font definitions
-├── package.json            # Scripts & project dependencies
-├── tsconfig.json           # TypeScript configuration
-└── vite.config.ts          # Vite & Tailwind CSS v4 plugin configuration
+│   ├── components/             # Reusable core components
+│   │   ├── navbar/             # Unified top navigation bar
+│   │   │   └── navbar.tsx
+│   │   ├── sidebar/            # Fixed independent-scroll sidebar
+│   │   │   └── sidebar.tsx
+│   │   ├── Navbar.tsx          # Clean component re-exports
+│   │   └── Sidebar.tsx
+│   ├── pages/                  # Page views (12 modules)
+│   │   ├── brands/
+│   │   ├── category/
+│   │   ├── create-product/
+│   │   ├── expired-products/
+│   │   ├── low-stocks/
+│   │   ├── print-barcode/
+│   │   ├── print-qr-code/
+│   │   ├── product/
+│   │   ├── sub-category/
+│   │   ├── units/
+│   │   ├── variant-attributes/
+│   │   └── warranties/
+│   ├── data/                   # Mock stores, initial data & types
+│   ├── App.tsx                 # Root router and shell layout
+│   ├── index.css               # Tailwind CSS v4 imports, tokens & custom scrollbars
+│   └── main.tsx                # React application entrypoint
+├── design.md                   # Single Source of Truth Design System & Migration Guide
+├── vercel.json                 # Vercel SPA routing rewrite rules
+├── package.json                # Dependencies and project scripts
+├── tsconfig.json               # TypeScript compiler configuration
+└── vite.config.ts              # Vite 8 & Tailwind CSS v4 plugin configuration
 ```
 
 ---
 
-## 🎨 Tailwind CSS v4 Configuration
+## 🚀 Getting Started
 
-Tailwind CSS v4 uses a zero-config, CSS-first setup:
-- **Vite Integration**: Registered via `@tailwindcss/vite` in [vite.config.ts](file:///d:/LancersLoom/Inventory-Management/vite.config.ts).
-- **Styles**: Injected via `@import "tailwindcss";` in [src/index.css](file:///d:/LancersLoom/Inventory-Management/src/index.css).
+### 1. Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **npm**: v9.0.0 or higher
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### 4. Build for Production
+```bash
+npm run build
+```
+Runs TypeScript verification (`tsc -b`) and generates production bundles with Vite.
+
+### 5. Code Quality & Linting
+```bash
+npm run lint
+```
+Runs high-speed linting with [Oxlint](https://oxc.rs/).
+
+### 6. Preview Production Build
+```bash
+npm run preview
+```
+
+---
+
+## 🌐 Deployment (Vercel)
+
+The repository includes a [vercel.json](file:///home/ashwin/Downloads/Antigravity%20IDE/LL/IM/Inventory-Management/vercel.json) file that configures single-page application (SPA) rewrites to prevent 404 errors when refreshing direct routes:
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+Simply push to GitHub and import the repository into your [Vercel Dashboard](https://vercel.com/dashboard).
+
+---
+
+## 📄 License & Credits
+
+Designed & Developed by **LancersLoom**.  
+© 2014 - 2026 LancersLoom. All Rights Reserved.
