@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import {
+  LayoutDashboard,
   Box,
   Grid2x2Plus,
   ClockAlert,
@@ -22,6 +23,7 @@ interface SidebarItem {
 }
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
+  { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'Products', path: '/products', icon: Box },
   { name: 'Create Product', path: '/create-product', icon: Grid2x2Plus },
   { name: 'Expired Products', path: '/expired-products', icon: ClockAlert },
@@ -41,7 +43,7 @@ export const Sidebar: React.FC = () => {
     <aside className="w-64 bg-[#FFFFFF] h-screen sticky top-0 border-r border-[#E8EAF0] flex flex-col py-5 px-3 select-none flex-shrink-0 overflow-hidden">
       {/* Brand Header */}
       <Link
-        to="/products"
+        to="/dashboard"
         className="flex items-center gap-3 px-3 pb-5 mb-4 border-b border-[#E8EAF0] hover:opacity-90 transition-opacity group flex-shrink-0"
       >
         <img
