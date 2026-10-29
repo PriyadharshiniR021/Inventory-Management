@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  /* Auralis Color Tokens */
+  --bg: #F7F7F5;
+  --panel: #F3F2EF;
+  --card: #FCFCFB;
+  --border: #E7E7E4;
+  --text: #111111;
+  --text-muted: #6B6B6B;
+  --primary: #000000;
+  --on-primary: #FFFFFF;
+  --outline: #747878;
+  --surface: #FDF8F8;
+  --surface-variant: #E5E2E1;
+  --surface-container-low: #F7F3F2;
+  --dark-surface: #1C1B1B;
+
+  /* Typography */
+  --font: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --nav-h: 72px;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 24px;
+  --r-2xl: 28px;
+  --r-full: 9999px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Blur */
+  --blur-bar: 12px;
+  --blur-orb: 64px;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    font-family: var(--font);
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text);
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+}
+
+/* Custom hairline borders and glass tokens */
+.hairline-border {
+  border: 1px solid #E7E7E4;
+}
+
+.hairline-b {
+  border-bottom: 1px solid #E7E7E4;
+}
+
+.hairline-r {
+  border-right: 1px solid #E7E7E4;
+}
+
+.pill-button {
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: all 150ms ease;
+}
